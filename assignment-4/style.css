@@ -1,0 +1,4 @@
+input:focus, select:focus{
+    box-shadow:none !important;
+    offset: #6CC953 !important;
+}

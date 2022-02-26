@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=>, initial-scale=1.0">
+    <title>form</title>
+
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css">
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="form">
+        <h1 class="text-center"> Registration Form </h1>
+        <form action="#" class="container" name="registration" method="post">
+            <div class="col-10 m-2" >
+                <select name="title" class="" id="title" >
+                    <option value="Mr">Mr</option>
+                    <option value="Ms">Ms</option>
+                    <option value="Mrs">Mrs</option>
+                </select>
+                <input type="text" class="mx-2" name="firstName" id="firstName" placeholder="first Name" required> 
+                <input type="text" class="mx-2" name="middleName" id="middleName" placeholder="middle Name" required>
+                <input type="text" class="mx-2" name="lastName" id="lastName" placeholder="lastName" required>
+            </div>
+            <div> 
+                <span class="h5"> Gender: </span>
+                <input type="radio" name="gender" class="m-2 p-2" value="Male" id="male" checked> Male
+                <input type="radio" name="gender" class="m-2 p-2" value="Female" id="female"> Female
+            </div>
+            <input type="email" class="text-lowercase m-2 p-2" name="email" id="emailID" placeholder="email" required>
+            <input type="text" name="contact" class="m-2 p-2" id="contactNo" placeholder="contact no" required>
+            <div name="parmenentAddress" class="d-flex flex-column" id="parmenentAddress">
+                <span class="m-2 p-1 h3"> parmenent address: </span>
+                <input type="text" name="houseNo" class="m-2 p-1 col-4" id="" placeholder="houseNo/blockNo/houseName" required>
+                <input type="text" name="street" class="m-2 p-1 col-4" id="" placeholder="addressLine1" required>
+                <input type="text" name="area" class="m-2 p-1 col-4" id="" placeholder="addressLine2" >
+                <input type="text" name="landmark" class="m-2 p-1 col-4" id="" placeholder="landmark" required>
+                <input type="text" name="city" class="m-2 p-1 col-4" id="" placeholder="city" required>
+                <select name="state" class="m-2 p-1 col-4" id="formState" required> </select>
+                <select name="country" class="m-2 p-1 col-4" id="" disabled>
+                    <option value="India" selected> India </option>
+                </select>
+                <input type="text" name="pincode" class="m-2 p-1 col-4" id="" placeholder="pincode" required>
+            </div>
+            <input type="text" class="m-2 p-1" name="designation" id="" placeholder="designation" required>
+            <div id="techKnown">
+                <span class="h5"> Known technology with experience:  </span> <br>
+                <div class="col-3 my-2">
+                    <input type="checkbox" name="techknown" class="col-1 px-2" value="Nodejs" id=""> Node.js </input>
+                    <input type="text" class=" col-3 mx-4" name="exp" id="" placeholder="in years"> </input>
+                </div>
+                <div class="col-3 my-2">
+                    <input type="checkbox" name="techknown" class="col-1 px-2" value="java" id=""> Java </input>
+                    <input type="text" class=" col-3 mx-4" name="exp" id="" placeholder="in years"> </input>
+                </div>
+                <div class="col-3 my-2">
+                    <input type="checkbox" name="techknown" class="col-1 px-2" value="vuejs" id=""> VueJs </input>
+                    <input type="text" class=" col-3 mx-4" name="exp" id="" placeholder="in years"> </input>
+                </div>
+                <div class="col-3 my-2">
+                    <input type="checkbox" name="techknown" class="col-1 px-2" value="reactjs" id=""> Reactjs </input>
+                    <input type="text" class=" col-3 mx-4" name="exp" id="" placeholder="in years"> </input>
+                </div>
+            </div>
+            <input type="date" name="careerStartDate" id="" placeholder="careerStart Date" required>
+            <input type="button" class="d-block m-2 btn btn-primary" id="btnSave" value="save">
+        </form>
+    </div>
+    <div>
+        <table class="table table-success table-striped text-center table-bordered" id="employee">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="align-middle text-center">ID</th>
+                    <th rowspan="2" class="align-middle text-center" >full Name</th>
+                    <th rowspan="2" class="align-middle text-center"> gender </th>
+                    <th colspan="3" class="text-center"> contact Detail </th>
+                    <th rowspan="2" class="align-middle text-center"> Designation </th>
+                    <th rowspan="2" class="align-middle text-center"> techKnown + exp</th>
+                    <th rowspan="2" class="align-middle text-center"> total Exp </th>
+                    <th rowspan="2" class="align-middle text-center"> Action </th>
+                </tr>
+                <tr>
+                    <th class="text-center"> email </th>
+                    <th class="text-center"> contact NO</th>
+                    <th class="text-center"> address </th>
+                </tr>
+            </thead>
+            <tbody id="table-data"> 
+
+            </tbody>
+        </table>
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>
