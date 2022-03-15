@@ -1,0 +1,16 @@
+ CREATE DATABASE gkd;
+CREATE DATABASE
+postgres=# \list
+gkd=# CREATE TABLE users(user_id INT PRIMARY KEY,user_name VARCHAR(240) NOT NULL,user_email VARCHAR(200) NOT NULL,user_password VARCHAR(200) NOT NULL);
+CREATE TABLE
+gkd=# INSERT INTO users(user_id,user_name,user_email,user_password) VALUES(1,'kirtan','kirtan.gadhiya@bacancy.com','KD12');
+INSERT 0 1
+gkd=# INSERT INTO users(user_id,user_name,user_email,user_password) VALUES(2,'jay','jaypatela@bacancy.com','JP12');
+INSERT 0 1
+               ^
+gkd=# SELECT user_name,user_email FROM users WHERE user_id=2;
+gkd=# UPDATE users SET user_name='shubham' WHERE user_id=2;
+
+gkd=# DELETE FROM users WHERE user_id=3;
+
+gkd=#
