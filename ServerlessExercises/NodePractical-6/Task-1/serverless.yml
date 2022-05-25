@@ -1,0 +1,15 @@
+service: Task-1
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  display:
+    handler: handler.dataWithCallback
+    events: 
+      - httpApi:
+            path: /
+            method: GET  
