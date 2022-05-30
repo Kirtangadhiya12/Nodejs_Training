@@ -1,0 +1,94 @@
+service: Practical-6-2
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+plugins:
+  - serverless-offline
+
+functions:
+  getUser:
+    handler: src/user/userController.getUser
+    events:
+      - httpApi:
+          path: /user
+          method: GET
+
+  addUser:
+    handler: src/user/userController.addUser
+    events:
+      - httpApi:
+          path: /user
+          method: POST
+
+  updateUser:
+    handler: src/user/userController.updateUser
+    events:
+      - httpApi:
+          path: /user/{ID}
+          method: PUT
+
+  deleteUser:
+    handler: src/user/userController.deleteUser
+    events:
+      - httpApi:
+          path: /user/{ID}
+          method: DELETE
+
+  getProject:
+    handler: src/project/projectController.getProject
+    events:
+      - httpApi:
+          path: /project
+          method: GET
+
+  addProject:
+    handler: src/project/projectController.addProject
+    events:
+      - httpApi:
+          path: /project
+          method: POST
+
+  updateProject:
+    handler: src/project/projectController.updateProject
+    events:
+      - httpApi:
+          path: /project/{ID}
+          method: PUT
+
+  deleteProject:
+    handler: src/project/projectController.deleteProject
+    events:
+      - httpApi:
+          path: /project/{ID}
+          method: DELETE
+
+  getTask:
+    handler: src/task/taskController.getTask
+    events:
+      - httpApi:
+          path: /task
+          method: GET
+  addTask:
+    handler: src/task/taskController.addTask
+    events:
+      - httpApi:
+          path: /task
+          method: POST
+
+  updateTask:
+    handler: src/task/taskController.updateTask
+    events:
+      - httpApi:
+          path: /task/{ID}
+          method: PUT
+
+  deleteTask:
+    handler: src/task/taskController.deleteTask
+    events:
+      - httpApi:
+          path: /task/{ID}
+          method: DELETE
