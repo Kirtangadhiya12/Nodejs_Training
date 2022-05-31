@@ -58,11 +58,5 @@
         "title": "P4 - Task 1",
         "description": "P1 - Task 2",
         "projectID": 5
-    },
-    {
-        "ID": 6,
-        "title": "employee Management System",
-        "description": "It is an employee Management System",
-        "projectID": 12
     }
 ]

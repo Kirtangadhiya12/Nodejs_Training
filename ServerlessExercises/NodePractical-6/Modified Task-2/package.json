@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "joi": "^17.6.0",
     "serverless-offline": "^8.8.0"
+  },
+  "devDependencies": {
+    "serverless-middleware": "^3.0.0"
   }
 }
