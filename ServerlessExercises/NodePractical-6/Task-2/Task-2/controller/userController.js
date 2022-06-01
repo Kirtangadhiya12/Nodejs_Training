@@ -2,7 +2,7 @@ const express=require('express');
 const { json } = require('express/lib/response');
 const fs=require('fs');
 
-const getuser = (req,res) => {
+const getUser = (req,res) => {
     fs.readFile('./users.json', (err, data) => {
         if(err) console.log(err);
         console.log(JSON.parse(data));
@@ -15,8 +15,8 @@ const addUser = (req, res) => {
     fs.readFile('./users.json', (err, data) => {
         let{
             ID,
-            fillname,
-            emailId,
+            fullName,
+            emailID,
             designation,
             department,
             technologiesKnown,
@@ -25,8 +25,8 @@ const addUser = (req, res) => {
         }=req.body;
         let User={
             ID,
-            fillname,
-            emailId,
+            fullName,
+            emailID,
             designation,
             department,
             technologiesKnown,
@@ -165,4 +165,4 @@ const deleteUser = async (req, res) => {
 
 }
 
-module.exports={getuser,addUser,updateUser,deleteUser};
+module.exports={getUser,addUser,updateUser,deleteUser};

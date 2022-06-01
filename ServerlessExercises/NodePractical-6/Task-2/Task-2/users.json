@@ -143,22 +143,5 @@
             2,
             4
         ]
-    },
-    {
-        "ID": 12,
-        "designation": "Software Engineer",
-        "department": "NodeJS",
-        "technologiesKnown": [
-            "NodeJS",
-            "Javascript",
-            "MongoDB",
-            "GraphQL",
-            "MeteorJS"
-        ],
-        "projects": [
-            1,
-            2,
-            5
-        ]
     }
 ]

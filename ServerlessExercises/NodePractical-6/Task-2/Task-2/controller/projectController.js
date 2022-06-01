@@ -145,4 +145,4 @@ const deleteProject = async (req, res) => {
 }
 
 
-module.exports={getProject,addProject,updateProject,deleteProject}
+module.exports={getProject,  addProject, updateProject,deleteProject}

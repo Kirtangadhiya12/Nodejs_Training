@@ -32,6 +32,8 @@ provider:
      Resource: 
       - arn:aws:dynamodb:us-east-1:158933594461:table/TodoTable 
 
+plugins:
+  - serverless-offline
 
 
 # you can add statements to the Lambda function's IAM Role here
@@ -66,35 +68,35 @@ provider:
 
 functions:
   addTodo:
-    handler: handler.addTodo
+    handler: add.addTodo
     events: 
       - httpApi:
             path: /
             method: POST
 
   fetchTodos:
-    handler: handler2.fetchTodos
+    handler: fetchAll.fetchTodos
     events: 
       - httpApi:
             path: /
             method: GET   
 
   fetchTodo:
-    handler: handler3.fetchTodo
+    handler: fetch.fetchTodo
     events: 
       - httpApi:
             path: /todo/{userId}
             method: GET                    
 
   updateTodo:
-    handler: handler4.updateTodo
+    handler: update.updateTodo
     events: 
       - httpApi:
             path: /todo/{userId}
             method: PUT                 
                     
   deleteTodo:
-    handler: handler5.deleteTodo
+    handler: delete.deleteTodo
     events: 
       - httpApi:
             path: /todo/{userId}

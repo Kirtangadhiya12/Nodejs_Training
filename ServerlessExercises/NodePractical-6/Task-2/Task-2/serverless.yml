@@ -1,5 +1,5 @@
 service: Task-2
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
@@ -9,7 +9,86 @@ plugins:
   - serverless-offline
 
 functions:
-  api:
+  getUser:
     handler: handler.handler
     events:
-      - httpApi: '*'
+      - httpApi:
+          path: /user
+          method: GET
+
+  addUser:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /user
+          method: POST
+
+  updateUser:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /user/{ID}
+          method: PUT
+
+  deleteUser:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /user/{ID}
+          method: DELETE
+
+  getProject:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /project
+          method: GET
+
+  addProject:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /project
+          method: POST
+
+  updateProject:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /project/{ID}
+          method: PUT
+
+  deleteProject:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /project/{ID}
+          method: DELETE
+
+  getTask:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /task
+          method: GET
+
+  addTask:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /task
+          method: POST
+
+  updateTask:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /task/{ID}
+          method: PUT
+
+  deleteTask:
+    handler: handler.handler
+    events:
+      - httpApi:
+          path: /task/{ID}
+          method: DELETE

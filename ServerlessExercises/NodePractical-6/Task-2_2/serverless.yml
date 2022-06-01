@@ -7,87 +7,99 @@ provider:
   runtime: nodejs14.x
 
 plugins:
+  - serverless-middleware
   - serverless-offline
+
 
 functions:
   getUser:
-    handler: src/user/userController.getUser
+    handler: src/controller/user/userController.getUser
     events:
       - httpApi:
           path: /user
           method: GET
+    
 
   addUser:
-    handler: src/user/userController.addUser
+    handler: src/controller/user/userController.addUser
     events:
       - httpApi:
           path: /user
           method: POST
-
+    middleware:
+      pre: 
+       - src/controller/user/user.validator.uservalidation
+       
   updateUser:
-    handler: src/user/userController.updateUser
+    handler: src/controller/user/userController.updateUser
     events:
       - httpApi:
           path: /user/{ID}
           method: PUT
 
   deleteUser:
-    handler: src/user/userController.deleteUser
+    handler: src/controller/user/userController.deleteUser
     events:
       - httpApi:
           path: /user/{ID}
           method: DELETE
 
   getProject:
-    handler: src/project/projectController.getProject
+    handler: src/controller/project/projectController.getProject
     events:
       - httpApi:
           path: /project
           method: GET
 
   addProject:
-    handler: src/project/projectController.addProject
+    handler: src/controller/project/projectController.addProject
     events:
       - httpApi:
           path: /project
           method: POST
+    middleware:
+      pre: 
+       - src/controller/project/project.validator.projectvalidation    
 
   updateProject:
-    handler: src/project/projectController.updateProject
+    handler: src/controller/project/projectController.updateProject
     events:
       - httpApi:
           path: /project/{ID}
           method: PUT
 
   deleteProject:
-    handler: src/project/projectController.deleteProject
+    handler: src/controller/project/projectController.deleteProject
     events:
       - httpApi:
           path: /project/{ID}
           method: DELETE
 
   getTask:
-    handler: src/task/taskController.getTask
+    handler: src/controller/task/taskController.getTask
     events:
       - httpApi:
           path: /task
           method: GET
   addTask:
-    handler: src/task/taskController.addTask
+    handler: src/controller/task/taskController.addTask
     events:
       - httpApi:
           path: /task
           method: POST
+    middleware:
+      pre: 
+       - src/controller/task/task.validator.taskvalidation
 
   updateTask:
-    handler: src/task/taskController.updateTask
+    handler: src/controller/task/taskController.updateTask
     events:
       - httpApi:
           path: /task/{ID}
           method: PUT
 
   deleteTask:
-    handler: src/task/taskController.deleteTask
+    handler: src/controller/task/taskController.deleteTask
     events:
       - httpApi:
           path: /task/{ID}
