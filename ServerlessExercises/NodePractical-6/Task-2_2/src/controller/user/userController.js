@@ -1,18 +1,31 @@
-const fs = require('fs');
+const AWS = require("../../DB/db")
 
 module.exports.getUser = async (event) => {
-    let data = fs.readFileSync('./users.json');
-    console.log(JSON.parse(data));
-    data = JSON.parse(data);
-    return ({
+
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+    let User
+
+    try {
+        const results = await dynamodb.scan({ TableName: "userTables" }).promise()
+        User = results.Items;
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    return {
         statusCode: 200,
-        body: JSON.stringify(data)
-    });
-}
+        body: JSON.stringify(User),
+    };
+};
+
 
 module.exports.addUser = async (event) => {
 
-    const data = fs.readFileSync('./users.json');
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+
     const {
         ID,
         fullName,
@@ -23,6 +36,7 @@ module.exports.addUser = async (event) => {
         projects
 
     } = JSON.parse(event.body);
+
     const User = {
         ID,
         fullName,
@@ -33,132 +47,81 @@ module.exports.addUser = async (event) => {
         projects
     }
 
-    const data1 = JSON.parse(data);
-    data1.push(User);
-    fs.writeFileSync('./users.json', JSON.stringify(data1, null, 4), 'utf-8');
-    return {
+    try {
+        await dynamodb.put({
+            TableName: "userTables",
+            Item: User
+        }).promise()
 
-        message: "User Added successfully",
+
+        return {
+            message: "User addded Sucessfully"
+        };
+    } catch (error) {
+        return {
+            message: error
+        }
     }
-}
 
-
+};
 
 module.exports.updateUser = async (event) => {
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
     const { ID } = event.pathParameters;
-
     const {
-
         fullName,
-
         emailID,
-
         designation,
-
         department,
-
         technologiesKnown,
+        projects } = JSON.parse(event.body);
 
-        projects,
 
-    } = JSON.parse(event.body);
 
-    try {
+    await dynamodb.update({
+        TableName: "userTables",
+        Key: { ID: parseInt(ID) },
+        UpdateExpression: 'set fullName = :n, emailID = :e, designation = :d, department = :dp,technologiesKnown = :t, projects = :p',
+        ExpressionAttributeValues: { ':n': fullName, ':e': emailID, ':d': designation, ':dp': department, ':t': technologiesKnown, ':p': projects, },
+        ReturnValues: "ALL_NEW"
+    }).promise()
 
-        let data = JSON.parse(fs.readFileSync("./users.json", "utf-8"));
 
-        const user = data.find(i => i.ID == ID)
-
-        if (user) {
-
-            let newUser = data.map(i => {
-
-                if (i.ID == ID) {
-
-                    i.fullName = fullName || i.fullName;
-
-                    i.emailID = emailID || i.emailID;
-
-                    i.designation = designation || i.designation;
-
-                    i.department = department || i.department;
-
-                    i.technologiesKnown = technologiesKnown || i.technologiesKnown;
-
-                    i.projects = projects || i.projects
-
-                }
-
-                return i;
-
-            });
-
-            newUser = JSON.stringify(newUser, null, 4);
-
-            fs.writeFileSync("./users.json", newUser);
-
-            return {
-                message: "User updated successfully."
-            }
-
-        } else {
-
-            return {
-                statusCode: 400,
-                message: "User Not found"
-            }
-
-        }
-
-    } catch (error) {
-        return {
-
-            message: 'user is not updated'
-        }
-    }
-
-}
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "User Updated"
+        }),
+    };
+};
 
 module.exports.deleteUser = async (event) => {
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+
     const { ID } = event.pathParameters;
 
-    try {
 
-        const data = JSON.parse(fs.readFileSync("./users.json", "utf-8"));
+    await dynamodb.delete({
+        TableName: "userTables",
+        Key: { ID: parseInt(ID) },
+        ReturnValues: 'ALL_OLD',
+    }).promise()
 
-        const user = data.find(i => i.ID == ID)
 
-        if (user) {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "User deleted"
+        }),
+    };
+};
 
-            let newUser = data.filter(i => {
 
-                return i.ID != ID;
 
-            });
 
-            newUser = JSON.stringify(newUser, null, 4);
-            fs.writeFileSync("./users.json", newUser);
 
-            return {
-                message: "User deleted successfully."
-            }
-
-        } else {
-            return {
-                message: "User not found"
-            }
-        }
-
-    } catch (error) {
-
-        return {
-
-            message: 'user is not updated'
-        }
-    }
-
-}
 
 

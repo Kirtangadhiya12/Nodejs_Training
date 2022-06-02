@@ -1,136 +1,113 @@
-const fs = require('fs');
+const AWS = require("../../DB/db")
 
 module.exports.getTask = async (event) => {
-    let data = fs.readFileSync('./tasks.json');
-    console.log(JSON.parse(data));
-    data = JSON.parse(data);
-    return ({
+
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+    let Task
+
+    try {
+        const results = await dynamodb.scan({ TableName: "taskTable" }).promise()
+        Task = results.Items;
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    return {
         statusCode: 200,
-        body: JSON.stringify(data)
-    });
-}
+        body: JSON.stringify(Task),
+    };
+};
 
 module.exports.addTask = async (event) => {
 
-    const data = fs.readFileSync('./tasks.json');
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+
     const {
         ID,
         title,
         description,
         projectID
 
-
     } = JSON.parse(event.body);
-    const Project = {
+
+    const Task = {
         ID,
         title,
         description,
         projectID
     }
 
-    const data1 = JSON.parse(data);
-    data1.push(Project);
-    fs.writeFile('./tasks.json', JSON.stringify(data1, null, 4), 'utf-8')
+    try {
+        await dynamodb.put({
+            TableName: "taskTable",
+            Item: Task
+        }).promise()
 
-    return ({
-        message: "Task Added successfully"
-    })
-}
 
+        return {
+            message: "Task addded Sucessfully"
+        };
+    } catch (error) {
+        return {
+            message: error.message
+        }
+    }
+
+};
 
 module.exports.updateTask = async (event) => {
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
     const { ID } = event.pathParameters;
-
     const {
         title,
-        description,
-        projectID
+        description, projectID } = JSON.parse(event.body);
 
-    } = JSON.parse(event.body);
 
-    try {
 
-        let data = JSON.parse(fs.readFileSync("./tasks.json", "utf-8"));
+    await dynamodb.update({
+        TableName: "taskTable",
+        Key: { ID: parseInt(ID) },
+        UpdateExpression: 'set title = :t,description = :d,projectID = :p',
+        ExpressionAttributeValues: { ':t': title, ':d': description, ':p': projectID },
+        ReturnValues: "ALL_NEW"
+    }).promise()
 
-        const task = data.find(i => i.ID == ID)
 
-        if (task) {
-
-            let newTask = data.map(i => {
-
-                if (i.ID == ID) {
-
-                    i.title = title || i.title;
-
-                    i.description = description || i.description;
-
-                    i.projectID = projectID || i.projectID;
-
-                }
-
-                return i;
-
-            });
-
-            newTask = JSON.stringify(newTask, null, 4);
-
-            fs.writeFileSync("./tasks.json", newTask);
-
-            return { message: "Task Updated successfully." }
-
-        } else {
-
-            return { message: 'Task not Found' };
-
-        }
-
-    } catch (error) {
-        return {
-            message: 'task is not updated'
-        }
-
-    }
-
-}
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Task Updated"
+        }),
+    };
+};
 
 module.exports.deleteTask = async (event) => {
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+
     const { ID } = event.pathParameters;
 
-    try {
 
-        const data = JSON.parse(fs.readFileSync("./tasks.json", "utf-8"));
+    await dynamodb.delete({
+        TableName: "taskTable",
+        Key: { ID: parseInt(ID) },
+        ReturnValues: 'ALL_OLD',
+    }).promise()
 
-        const task = data.find(i => i.ID == ID)
 
-        if (task) {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Task deleted"
+        }),
+    };
+};
 
-            let newTask = data.filter(i => {
-
-                return i.ID != ID;
-
-            });
-
-            newTask = JSON.stringify(newTask, null, 4);
-            fs.writeFileSync("./tasks.json", newTask);
-
-            return { message: "Task deleted successfully." }
-
-        } else {
-
-            return { message: 'Task Not Found' };
-
-        }
-
-    } catch (error) {
-        return {
-            message: 'Task is  not Deleted'
-        }
-
-    }
-
-}
 
 
 

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "joi": "^17.6.0",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-middleware": "^3.0.0",
+    "serverless-offline": "^8.8.0",
+    "xmlbuilder": "^15.1.1"
+  }
+}

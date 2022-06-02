@@ -1,133 +1,112 @@
-const fs = require('fs');
+const AWS = require("../../DB/db")
 
 module.exports.getProject = async (event) => {
-    let data = fs.readFileSync('./projects.json');
-    console.log(JSON.parse(data));
-    data = JSON.parse(data);
-    return ({
-        statusCode: 200,
-        body: JSON.stringify(data)
-    });
-}
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+    let Project
+
+    try {
+        const results = await dynamodb.scan({ TableName: "projectTable" }).promise()
+        Project = results.Items;
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(Project),
+    };
+};
 
 module.exports.addProject = async (event) => {
 
-    const data = fs.readFileSync('./projects.json');
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+
     const {
         ID,
         title,
         description
 
-
     } = JSON.parse(event.body);
+
     const Project = {
         ID,
         title,
         description
     }
 
-    const data1 = JSON.parse(data);
+    try {
+        await dynamodb.put({
+            TableName: "projectTable",
+            Item: Project
+        }).promise()
 
-    data1.push(Project);
-    fs.writeFileSync('./projects.json', JSON.stringify(data1, null, 4), 'utf-8');
 
-    return {
-        message: "Project Added successfully"
+        return {
+            message: "Project addded Sucessfully"
+        };
+    } catch (error) {
+        return {
+            message: error.message
+        }
     }
-}
+
+};
 
 module.exports.updateProject = async (event) => {
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
     const { ID } = event.pathParameters;
-
     const {
         title,
-        description
-    } = JSON.parse(event.body);
+        description } = JSON.parse(event.body);
 
-    try {
 
-        let data = JSON.parse(fs.readFileSync("./projects.json", "utf-8"));
 
-        const project = data.find(i => i.ID == ID)
+    await dynamodb.update({
+        TableName: "projectTable",
+        Key: { ID: parseInt(ID) },
+        UpdateExpression: 'set title = :t,description = :d',
+        ExpressionAttributeValues: { ':t': title, ':d': description, },
+        ReturnValues: "ALL_NEW"
+    }).promise()
 
-        if (project) {
 
-            let newProject = data.map(i => {
-
-                if (i.ID == ID) {
-
-                    i.title = title || i.title;
-
-                    i.description = description || i.description;
-
-                }
-
-                return i;
-            });
-
-            newProject = JSON.stringify(newProject, null, 4);
-
-            fs.writeFileSync("./projects.json", newProject);
-
-            return {
-                message: "Project Updated successfully."
-            }
-        } else {
-
-            return {
-                message: 'Project not Found'
-            }
-
-        }
-
-    } catch (error) {
-        return {
-            message: 'project is not updated'
-        }
-    }
-
-}
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Project Updated"
+        }),
+    };
+};
 
 module.exports.deleteProject = async (event) => {
 
+    const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+
     const { ID } = event.pathParameters;
 
-    try {
 
-        const data = JSON.parse(fs.readFileSync("./projects.json", "utf-8"));
+    await dynamodb.delete({
+        TableName: "projectTable",
+        Key: { ID: parseInt(ID) },
+        ReturnValues: 'ALL_OLD',
+    }).promise()
 
-        const project = data.find(i => i.ID == ID)
 
-        if (project) {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Project deleted"
+        }),
+    };
+};
 
-            let newProject = data.filter(i => {
 
-                return i.ID != ID;
 
-            });
-
-            newProject = JSON.stringify(newProject, null, 4);
-            fs.writeFileSync("./projects.json", newProject);
-
-            return {
-                message: "Project deleted successfully."
-            }
-
-        } else {
-
-            return { message: 'project Not Found' };
-
-        }
-
-    } catch (error) {
-        return {
-            message: 'project is not deleted'
-        }
-
-    }
-
-}
 
 

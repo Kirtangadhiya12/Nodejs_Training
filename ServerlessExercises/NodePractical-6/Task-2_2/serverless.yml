@@ -9,7 +9,21 @@ provider:
 plugins:
   - serverless-middleware
   - serverless-offline
+  - serverless-dynamodb-local
 
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+      noStart: true
 
 functions:
   getUser:
@@ -18,7 +32,6 @@ functions:
       - httpApi:
           path: /user
           method: GET
-    
 
   addUser:
     handler: src/controller/user/userController.addUser
@@ -28,8 +41,8 @@ functions:
           method: POST
     middleware:
       pre: 
-       - src/controller/user/user.validator.uservalidation
-       
+       - src/controller/user/user.validator.uservalidation  
+
   updateUser:
     handler: src/controller/user/userController.updateUser
     events:
@@ -104,3 +117,41 @@ functions:
       - httpApi:
           path: /task/{ID}
           method: DELETE
+
+resources:
+  Resources:
+    userTables:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: userTables
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: ID
+            AttributeType: N
+        KeySchema:
+          - AttributeName: ID
+            KeyType: HASH
+
+    projectTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: projectTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: ID
+            AttributeType: N
+        KeySchema:
+          - AttributeName: ID
+            KeyType: HASH      
+
+    taskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: taskTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: ID
+            AttributeType: N
+        KeySchema:
+          - AttributeName: ID
+            KeyType: HASH              
